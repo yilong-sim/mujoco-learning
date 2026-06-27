@@ -107,7 +107,7 @@ Create.
 ```bash
 git add .
 git status                         # confirm: no mujoco_menagerie/ listed
-git commit -m "phase1 week1: hand-written 2-DOF arm + canonical loop"
+git commit -m "phase1: hand-written 2-DOF arm + canonical loop"
 git remote add origin git@github.com:yilong-sim/mujoco-learning.git
 git branch -M main
 git push -u origin main

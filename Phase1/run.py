@@ -33,8 +33,9 @@ print(f"nsensordata       : {model.nsensordata}") # 7  -> 1+1+1+1+3
 
 # Look up the tip sensor's address by NAME instead of hardcoding an index.
 # This is the habit to build: mj_name2id + sensor_adr, not magic numbers.
-tip_sid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, "tip_pos")
-tip_adr = model.sensor_adr[tip_sid]
+def get_sensor_address(model, sensor_name):
+    sensor_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, sensor_name)
+    return model.sensor_adr[sensor_id]
 
 # Push the arm off equilibrium so the swing is interesting (radians).
 data.qpos[:] = [0.0, -0.8]   # [shoulder, elbow]
@@ -58,10 +59,21 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         # 1. SENSE: read state back out. Print every 200 steps so it's readable.
         if step % 200 == 0:
+            shoulder_pos_adr = get_sensor_address(model, "shoulder_pos")
+            elbow_pos_adr = get_sensor_address(model, "elbow_pos")
+            shoulder_vel_adr = get_sensor_address(model, "shoulder_vel")
+            elbow_vel_adr = get_sensor_address(model, "elbow_vel")
+            tip_adr = get_sensor_address(model, "tip_pos")
+
+            shoulder_pos = data.sensordata[shoulder_pos_adr]
+            elbow_pos = data.sensordata[elbow_pos_adr]
+            shoulder_vel = data.sensordata[shoulder_vel_adr]
+            elbow_vel = data.sensordata[elbow_vel_adr]
             tip = data.sensordata[tip_adr:tip_adr + 3]   # world (x, y, z) of the tip
             print(
                 f"t={data.time:6.2f}  "
-                f"shoulder={data.qpos[0]:+.3f}  elbow={data.qpos[1]:+.3f}  "
+                f"shoulder_pos={shoulder_pos:+.3f}  elbow_pos={elbow_pos:+.3f}  "
+                f"shoulder_vel={shoulder_vel:+.3f}  elbow_vel={elbow_vel:+.3f}  "
                 f"tip=({tip[0]:+.3f}, {tip[1]:+.3f}, {tip[2]:+.3f})"
             )
 
