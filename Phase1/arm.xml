@@ -1,0 +1,68 @@
+<mujoco model="planar_2dof_arm">
+  <!-- ====================================================================
+       Phase 1 / Week 1 scaffold: a hand-written 2-DOF planar arm.
+       Read this top to bottom. Every element is deliberately minimal so
+       you can hold the whole model in your head and break it on purpose.
+       ==================================================================== -->
+
+  <!-- Global simulation options. timestep is your integrator's dt.
+       Too large -> the sim explodes (NaNs). This is pitfall #1. -->
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <worldbody>
+    <!-- A light so the scene isn't flat. Not physics, just rendering. -->
+    <light pos="0 0 2" dir="0 0 -1" diffuse="0.8 0.8 0.8"/>
+
+    <!-- The fixed base the arm hangs from. It has NO joint, so it is
+         welded to the world frame (static). pos lifts it up so the arm
+         has room to swing below it. -->
+    <body name="base" pos="0 0 1">
+      <!-- <geom name="base_geom" type="cylinder" size="0.04 0.05" contype="0" conaffinity="0" rgba="0.3 0.3 0.3 1"/> -->
+      <geom name="base_geom" type="cylinder" size="0.04 0.05" rgba="0.3 0.3 0.3 1"/>
+
+      <!-- LINK 1 (shoulder). The hinge axis "0 1 0" is the world y-axis,
+           so this link swings in the x-z plane and falls under gravity. -->
+      <body name="link1" pos="0 0 0">
+        <joint name="shoulder" type="hinge" axis="0 1 0" pos="0.0 0 0" range="-180 180"/>
+        <!-- A capsule from the joint out to +x. MuJoCo infers this link's
+             mass and inertia FROM this geom (because there is no <inertial>
+             element). Delete this geom and you'll get a "mass and inertia
+             must be positive" error -> that's a great break-it lesson. -->
+        <geom name="link1_geom" type="capsule" fromto="0 0 0  0.3 0 0" size="0.03" rgba="0.2 0.5 0.8 1"/>
+
+        <!-- LINK 2 (elbow), mounted at the far end of link1 (pos x=0.3). -->
+        <body name="link2" pos="0.3 0 0">
+          <joint name="elbow" type="hinge" axis="0 1 0" pos="0.0 0 0" range="-180 180"/>
+          <geom name="link2_geom" type="capsule" fromto="0 0 0  0.3 0 0" size="0.03" rgba="0.8 0.4 0.2 1"/>
+
+          <!-- A site at the very tip = the "end effector". Sites are
+               massless reference frames you attach sensors to. -->
+          <site name="tip" pos="0.3 0 0" size="0.02" rgba="1 1 0 1"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <!-- ACTUATORS (you'll use these in Week 2). One motor per joint.
+       You drive them by writing into data.ctrl. ctrlrange clamps the
+       command -> if a motor "does nothing", a too-tight ctrlrange is a
+       common cause (pitfall in the watchlist). -->
+  <actuator>
+    <motor name="shoulder_motor" joint="shoulder" gear="1" ctrlrange="-8 8"/>
+    <motor name="elbow_motor"    joint="elbow"    gear="1" ctrlrange="-3 3"/>
+    <!-- <position joint="shoulder" ctrlrange="0 6.28" kp="5.0" />
+    <position joint="elbow" ctrlrange="0 6.28" kp="5.0" /> -->
+  </actuator>
+
+  <!-- SENSORS (you'll read these in Week 2). Declaring a sensor here makes
+       its value appear in data.sensordata, laid out in THIS order:
+         shoulder_pos(1), elbow_pos(1), shoulder_vel(1), elbow_vel(1), tip_pos(3)
+       Reading sensordata before mj_forward/mj_step returns zero -> pitfall #4. -->
+  <sensor>
+    <jointpos name="shoulder_pos" joint="shoulder"/>
+    <jointpos name="elbow_pos"    joint="elbow"/>
+    <jointvel name="shoulder_vel" joint="shoulder"/>
+    <jointvel name="elbow_vel"    joint="elbow"/>
+    <framepos name="tip_pos" objtype="site" objname="tip"/>
+  </sensor>
+</mujoco>

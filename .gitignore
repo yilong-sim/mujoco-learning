@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.mp4
+*.png
+checkpoints/
+runs/
+logs/
+mujoco_menagerie/
+.DS_Store
