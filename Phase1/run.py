@@ -52,7 +52,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         # 2. CONTROL (Week 2): write into data.ctrl to drive the motors.
         #    Left commented for Week 1 -> the arm is unpowered and just falls.
-        data.ctrl[:] = [5.0, -3.0]
+        data.ctrl[:] = [2.0, 1.0]
 
         # 3. STEP: advance the physics by one model.opt.timestep.
         mujoco.mj_step(model, data)

@@ -17,10 +17,10 @@
          welded to the world frame (static). pos lifts it up so the arm
          has room to swing below it. -->
     <body name="base" pos="0 0 1">
-      <!-- <geom name="base_geom" type="cylinder" size="0.04 0.05" contype="0" conaffinity="0" rgba="0.3 0.3 0.3 1"/> -->
-      <geom name="base_geom" type="cylinder" size="0.04 0.05" rgba="0.3 0.3 0.3 1"/>
+      <geom name="base_geom" type="cylinder" size="0.04 0.05" contype="0" conaffinity="0" rgba="0.3 0.3 0.3 1"/> -->
+      <!-- <geom name="base_geom" type="cylinder" size="0.04 0.05" rgba="0.3 0.3 0.3 1"/> -->
 
-      <!-- LINK 1 (shoulder). The hinge axis "0 1 0" is the world y-axis,
+      <!-- LINK 1 (shoulder). The hinge axis "0 1 0" is the world y-a'xis,
            so this link swings in the x-z plane and falls under gravity. -->
       <body name="link1" pos="0 0 0">
         <joint name="shoulder" type="hinge" axis="0 1 0" pos="0.0 0 0" range="-180 180"/>
@@ -48,10 +48,11 @@
        command -> if a motor "does nothing", a too-tight ctrlrange is a
        common cause (pitfall in the watchlist). -->
   <actuator>
-    <motor name="shoulder_motor" joint="shoulder" gear="1" ctrlrange="-8 8"/>
-    <motor name="elbow_motor"    joint="elbow"    gear="1" ctrlrange="-3 3"/>
-    <!-- <position joint="shoulder" ctrlrange="0 6.28" kp="5.0" />
-    <position joint="elbow" ctrlrange="0 6.28" kp="5.0" /> -->
+    <!-- <motor name="shoulder_motor" joint="shoulder" gear="1" ctrlrange="-8 8"/> -->
+    <!-- <motor name="elbow_motor"    joint="elbow"    gear="1" ctrlrange="-3 3"/> -->
+    <position name="shoulder_pos_act" joint="shoulder" kp="10" kv="1" ctrlrange="-3.14 3.14"/>
+    <position name="elbow_pos_act"    joint="elbow"    kp="10" kv="1" ctrlrange="-3.14 3.14"/>
+
   </actuator>
 
   <!-- SENSORS (you'll read these in Week 2). Declaring a sensor here makes
