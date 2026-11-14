@@ -8,3 +8,6 @@ runs/
 logs/
 mujoco_menagerie/
 .DS_Store
+
+# source of PLAN.md (convert with pandoc; PLAN.md is tracked)
+MuJoCo_Study_Plan_v4.docx
