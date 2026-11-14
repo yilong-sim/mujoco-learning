@@ -49,35 +49,24 @@ do not revisit it mid-plan.
 
 Protect the environment now:
 
-> mamba activate robo
->
-> python -c "import mujoco; print(mujoco.\_\_version\_\_)" \# must print
-> 3.9.0
->
-> pip freeze \> requirements.lock.txt \# snapshot before anything else
->
-> \# From now on, always install with pins. Never run a bare "pip
-> install -U".
->
-> pip install "mujoco==3.9.0" "mujoco-mjx==3.9.0" SALib gymnasium
+```bash
+mamba activate robo
+python -c "import mujoco; print(mujoco.__version__)"      # must print 3.9.0
+pip freeze > requirements.lock.txt  # snapshot before anything else
+# From now on, always install with pins. Never run a bare "pip install -U".
+pip install "mujoco==3.9.0" "mujoco-mjx==3.9.0" SALib gymnasium
+```
 
 Add these lines to the Environment section of CLAUDE.md (the complete
 file is in the Working with Claude Code section):
 
-> \- Versions are pinned: mujoco==3.9.0, mujoco-mjx==3.9.0,
-> playground==0.2.0. Never upgrade them.
->
-> A bare "pip install mujoco" or "pip install playground" installs
-> MuJoCo 4 / Playground 1.0
->
-> (PyTorch + Warp), which breaks this repo. Always pass explicit
-> ==versions.
->
-> \- Menagerie Panda facts: 9 DOF (7 arm + 2 finger), 8 actuators, no
-> sites, keyframe "home",
->
-> integrator implicitfast, dt 0.002. Use body "hand" for Jacobians
-> unless I add a site.
+```markdown
+- Versions are pinned: mujoco==3.9.0, mujoco-mjx==3.9.0, playground==0.2.0. Never upgrade them.
+  A bare "pip install mujoco" or "pip install playground" installs MuJoCo 4 / Playground 1.0
+  (PyTorch + Warp), which breaks this repo. Always pass explicit ==versions.
+- Menagerie Panda facts: 9 DOF (7 arm + 2 finger), 8 actuators, no sites, keyframe "home",
+  integrator implicitfast, dt 0.002. Use body "hand" for Jacobians unless I add a site.
+```
 
 # Roadmap at a glance
 
@@ -156,9 +145,10 @@ results."</th>
 1.  Launch from the active environment so the agent's shell sees your
     MuJoCo and GPU:
 
-> mamba activate robo
->
-> cd ~/mujoco-study && claude
+```bash
+mamba activate robo
+cd ~/mujoco-study && claude
+```
 
 2.  Put the CLAUDE.md below in the repo root. Claude Code reads it at
     the start of every session. It is the v3 file plus the v4 version
@@ -167,8 +157,9 @@ results."</th>
 3.  Give the agent the plan. Export this document to markdown and commit
     it, so any session can start with "read PLAN.md, Session 2.3":
 
-> pandoc MuJoCo_Study_Plan_v4.docx -t gfm -o PLAN.md && git add PLAN.md
-> && git commit -m "plan v4"
+```bash
+pandoc MuJoCo_Study_Plan_v4.docx -t gfm -o PLAN.md && git add PLAN.md && git commit -m "plan v4"
+```
 
 4.  Set permissions with /permissions: allow pytest, python and git add
     / git commit without prompting. Keep prompts on for pip, mamba, rm
@@ -180,111 +171,58 @@ results."</th>
     open the image and describe it." This confirms the environment,
     headless rendering, and that the agent can see what it renders.
 
-> \# mujoco-study
->
-> Learning MuJoCo + robotics (Modern Robotics, Lynch & Park) toward
-> robotics simulation roles.
->
-> Background: FEM/continuum, MD/stat mech, optimization. The study plan
-> is PLAN.md.
->
-> \## Environment
->
-> \- WSL2 Ubuntu 24.04, RTX 2000 Ada 8 GB. Conda env: robo. Headless
-> rendering: MUJOCO_GL=egl.
->
-> \- Versions are pinned: mujoco==3.9.0, mujoco-mjx==3.9.0,
-> playground==0.2.0. Never upgrade them.
->
-> A bare "pip install mujoco" or "pip install playground" installs
-> MuJoCo 4 / Playground 1.0
->
-> (PyTorch + Warp), which breaks this repo. Always pass explicit
-> ==versions.
->
-> \- Your knowledge of MuJoCo is older than this install. Verify every
-> function signature with
->
-> help() in the installed package before using it.
->
-> \- Menagerie Panda facts: 9 DOF (7 arm + 2 finger), 8 actuators, no
-> sites, keyframe "home",
->
-> integrator implicitfast, dt 0.002. Use body "hand" for Jacobians
-> unless I add a site.
->
-> \- Never install NVIDIA drivers inside WSL2.
->
-> \## How to help me (this is a learning project)
->
-> \- Do NOT write code in models/, controllers/ or rewards/ unless I say
-> "write it".
->
-> Explain, give hints, or leave TODO stubs instead.
->
-> \- You MAY write: tests/, tools/, sweeps/, envs/ (from my spec),
-> configs, plots.
->
-> \- For experiments with a known answer, ask for my prediction before
-> you run anything.
->
-> \- Debugging: state the root cause and the evidence before proposing a
-> fix.
->
-> \- Never silently change physics parameters (timestep, integrator,
-> gains, solref/solimp,
->
-> cone, impratio, friction, damping). Propose the change and explain
-> why.
->
-> \- Tests must assert against MuJoCo ground truth or an analytic
-> result, never against my own code.
->
-> \- Use FEM / stat-mech analogies when they genuinely help.
->
-> \## Conventions
->
-> \- Tests: pytest -q Render: python tools/render.py \<model.xml\>
-> \<out\>
->
-> \- Each experiment saves a plot (+ mp4 where useful) to
-> results/\<phase\>/
->
-> \- Commit before every tuning pass and before any task that touches
-> physics.
->
-> Message format: "phaseN: \<what works\>"
->
-> \- End each session by updating PROGRESS.md (done / next / open
-> questions).
+```markdown
+# mujoco-study
+Learning MuJoCo + robotics (Modern Robotics, Lynch & Park) toward robotics simulation roles.
+Background: FEM/continuum, MD/stat mech, optimization. The study plan is PLAN.md.
+ 
+## Environment
+- WSL2 Ubuntu 24.04, RTX 2000 Ada 8 GB. Conda env: robo. Headless rendering: MUJOCO_GL=egl.
+- Versions are pinned: mujoco==3.9.0, mujoco-mjx==3.9.0, playground==0.2.0. Never upgrade them.
+  A bare "pip install mujoco" or "pip install playground" installs MuJoCo 4 / Playground 1.0
+  (PyTorch + Warp), which breaks this repo. Always pass explicit ==versions.
+- Your knowledge of MuJoCo is older than this install. Verify every function signature with
+  help() in the installed package before using it.
+- Menagerie Panda facts: 9 DOF (7 arm + 2 finger), 8 actuators, no sites, keyframe "home",
+  integrator implicitfast, dt 0.002. Use body "hand" for Jacobians unless I add a site.
+- Never install NVIDIA drivers inside WSL2.
+ 
+## How to help me (this is a learning project)
+- Do NOT write code in models/, controllers/ or rewards/ unless I say "write it".
+  Explain, give hints, or leave TODO stubs instead.
+- You MAY write: tests/, tools/, sweeps/, envs/ (from my spec), configs, plots.
+- For experiments with a known answer, ask for my prediction before you run anything.
+- Debugging: state the root cause and the evidence before proposing a fix.
+- Never silently change physics parameters (timestep, integrator, gains, solref/solimp,
+  cone, impratio, friction, damping). Propose the change and explain why.
+- Tests must assert against MuJoCo ground truth or an analytic result, never against my own code.
+- Use FEM / stat-mech analogies when they genuinely help.
+ 
+## Conventions
+- Tests: pytest -q        Render: python tools/render.py <model.xml> <out>
+- Each experiment saves a plot (+ mp4 where useful) to results/<phase>/
+- Commit before every tuning pass and before any task that touches physics.
+  Message format: "phaseN: <what works>"
+- End each session by updating PROGRESS.md (done / next / open questions).
+```
 
 Repo layout, with ownership visible in the folders:
 
-> mujoco-study/
->
-> CLAUDE.md PLAN.md PROGRESS.md
->
-> models/ MJCF \<- you
->
-> controllers/ PD, IK, computed torque, MPC \<- you
->
-> rewards/ reward functions \<- you
->
-> docs/ ENV_SPEC.md, SA_DESIGN.md, DR_PROTOCOL.md \<- you
->
-> envs/ Gymnasium wrappers \<- Claude, from your spec
->
-> tools/ render, contact logging \<- Claude
->
-> sweeps/ parameter sweeps \<- Claude
->
-> tests/ ground-truth tests \<- Claude (you define what to assert)
->
-> drills/ broken copies for diagnosis \<- Claude
->
-> results/\<phase\>/ plots, logs, mp4
->
-> .claude/skills/sa-run/SKILL.md \<- Phase 4
+```text
+mujoco-study/
+  CLAUDE.md  PLAN.md  PROGRESS.md
+  models/        MJCF                          <- you
+  controllers/   PD, IK, computed torque, MPC  <- you
+  rewards/       reward functions              <- you
+  docs/          ENV_SPEC.md, SA_DESIGN.md, DR_PROTOCOL.md   <- you
+  envs/          Gymnasium wrappers            <- Claude, from your spec
+  tools/         render, contact logging       <- Claude
+  sweeps/        parameter sweeps              <- Claude
+  tests/         ground-truth tests            <- Claude (you define what to assert)
+  drills/        broken copies for diagnosis   <- Claude
+  results/<phase>/                             plots, logs, mp4
+  .claude/skills/sa-run/SKILL.md               <- Phase 4
+```
 
 ## A 5-hour week
 
@@ -382,20 +320,14 @@ joints. Your own torque controller must not fight them.
 
 1.  Print what you are dealing with:
 
-> python - \<\<'EOF'
->
-> import mujoco
->
-> m =
-> mujoco.MjModel.from_xml_path("mujoco_menagerie/franka_emika_panda/scene.xml")
->
-> print("nq nv nu", m.nq, m.nv, m.nu, "dt", m.opt.timestep, "nsite",
-> m.nsite)
->
-> print("kp", m.actuator_gainprm\[:, 0\]); print("bias",
-> m.actuator_biasprm\[:, :3\])
->
-> EOF
+```bash
+python - <<'EOF'
+import mujoco
+m = mujoco.MjModel.from_xml_path("mujoco_menagerie/franka_emika_panda/scene.xml")
+print("nq nv nu", m.nq, m.nv, m.nu, "dt", m.opt.timestep, "nsite", m.nsite)
+print("kp", m.actuator_gainprm[:, 0]); print("bias", m.actuator_biasprm[:, :3])
+EOF
+```
 
 2.  Choose how to get torque mode. Option A: copy panda.xml into
     models/panda_torque.xml and replace the seven arm actuators with
@@ -405,11 +337,11 @@ joints. Your own torque controller must not fight them.
     data.qfrc_applied. Option A is the cleaner portfolio artifact;
     Option B is the faster check. The B route, verified:
 
-> m.actuator_gainprm\[:7, 0\] = 0 \# kp off
->
-> m.actuator_biasprm\[:7, 1:3\] = 0 \# -kp, -kv off
->
-> mujoco.mj_resetDataKeyframe(m, d, 0) \# keyframe 0 is "home"
+```python
+m.actuator_gainprm[:7, 0] = 0          # kp off
+m.actuator_biasprm[:7, 1:3] = 0        # -kp, -kv off
+mujoco.mj_resetDataKeyframe(m, d, 0)   # keyframe 0 is "home"
+```
 
 3.  Gravity compensation: each step, call mj_forward, then set
     data.qfrc_applied\[:7\] = data.qfrc_bias\[:7\], then mj_step. The
@@ -450,36 +382,24 @@ The Panda has no sites, so use the hand body, or add a site at the
 fingertip midpoint in your model copy (an MJCF decision, so yours).
 Jacobian call and a finite-difference check:
 
-> import numpy as np, mujoco
->
-> hand = m.body("hand").id
->
-> jacp = np.zeros((3, m.nv)); jacr = np.zeros((3, m.nv))
->
-> mujoco.mj_forward(m, d)
->
-> mujoco.mj_jacBody(m, d, jacp, jacr, hand) \# with a site:
-> mj_jacSite(m, d, jacp, jacr, site_id)
->
-> \# finite-difference check of jacp
->
-> eps, q0, x0 = 1e-6, d.qpos.copy(), d.xpos\[hand\].copy()
->
-> Jfd = np.zeros((3, m.nv))
->
-> for j in range(m.nv):
->
-> q = q0.copy(); dq = np.zeros(m.nv); dq\[j\] = eps
->
-> mujoco.mj_integratePos(m, q, dq, 1.0) \# correct on any joint type
->
-> d.qpos\[:\] = q; mujoco.mj_kinematics(m, d)
->
-> Jfd\[:, j\] = (d.xpos\[hand\] - x0) / eps
->
-> d.qpos\[:\] = q0; mujoco.mj_forward(m, d)
->
-> print(np.abs(Jfd - jacp).max()) \# reference: about 3e-7
+```python
+import numpy as np, mujoco
+hand = m.body("hand").id
+jacp = np.zeros((3, m.nv)); jacr = np.zeros((3, m.nv))
+mujoco.mj_forward(m, d)
+mujoco.mj_jacBody(m, d, jacp, jacr, hand)  # with a site: mj_jacSite(m, d, jacp, jacr, site_id)
+ 
+# finite-difference check of jacp
+eps, q0, x0 = 1e-6, d.qpos.copy(), d.xpos[hand].copy()
+Jfd = np.zeros((3, m.nv))
+for j in range(m.nv):
+    q = q0.copy(); dq = np.zeros(m.nv); dq[j] = eps
+    mujoco.mj_integratePos(m, q, dq, 1.0)          # correct on any joint type
+    d.qpos[:] = q; mujoco.mj_kinematics(m, d)
+    Jfd[:, j] = (d.xpos[hand] - x0) / eps
+d.qpos[:] = q0; mujoco.mj_forward(m, d)
+print(np.abs(Jfd - jacp).max())                    # reference: about 3e-7
+```
 
 Write your own FK from the MR Chapter 4 product of exponentials for at
 least the first three joints and compare with data.xpos. That is the one
@@ -490,14 +410,12 @@ place in this phase where hand-derivation pays off.
 The update is Δq = Jᵀ (J Jᵀ + λ² I)⁻¹ e. Write controllers/ik.py
 yourself. The core lines, for checking after you have tried:
 
-> J = jacp\[:, :7\]
->
-> e = target - d.xpos\[hand\]
->
-> dq = J.T @ np.linalg.solve(J @ J.T + lam\*\*2 \* np.eye(3), e)
->
-> d.qpos\[:7\] += step \* dq \# kinematic test; then mj_kinematics +
-> mj_comPos
+```python
+J = jacp[:, :7]
+e = target - d.xpos[hand]
+dq = J.T @ np.linalg.solve(J @ J.T + lam**2 * np.eye(3), e)
+d.qpos[:7] += step * dq  # kinematic test; then mj_kinematics + mj_comPos
+```
 
 Reference: with λ = 0.05 and step 0.5, a 0.27 m offset converges to
 machine precision within 200 iterations in a purely kinematic loop. Then
@@ -512,32 +430,26 @@ mujoco.mju_subQuat and the full 6×7 Jacobian.
 The textbook form is τ = M(q)·q̈\_des + qfrc_bias with q̈\_des = kp·(q_des
 − q) − kv·q̇. mj_fullM takes the destination first:
 
-> M = np.zeros((m.nv, m.nv))
->
-> mujoco.mj_forward(m, d)
->
-> mujoco.mj_fullM(m, M, d.qM)
->
-> qacc_des = np.zeros(m.nv)
->
-> qacc_des\[:7\] = kp \* (q_des - d.qpos\[:7\]) - kv \* d.qvel\[:7\]
->
-> d.qfrc_applied\[:7\] = (M @ qacc_des + d.qfrc_bias)\[:7\]
->
-> mujoco.mj_step(m, d)
+```python
+M = np.zeros((m.nv, m.nv))
+mujoco.mj_forward(m, d)
+mujoco.mj_fullM(m, M, d.qM)
+qacc_des = np.zeros(m.nv)
+qacc_des[:7] = kp * (q_des - d.qpos[:7]) - kv * d.qvel[:7]
+d.qfrc_applied[:7] = (M @ qacc_des + d.qfrc_bias)[:7]
+mujoco.mj_step(m, d)
+```
 
 Now the check that v3 lacked. MuJoCo can invert its own dynamics, so you
 can ask it for the torque that produces a given acceleration and compare
 with yours:
 
-> mujoco.mj_forward(m, d) \# computes d.qacc from applied forces
->
-> applied = d.qfrc_applied + d.qfrc_actuator
->
-> mujoco.mj_inverse(m, d) \# computes d.qfrc_inverse from d.qacc
->
-> print(np.abs(d.qfrc_inverse - applied).max()) \# reference: about
-> 9e-16, no contact
+```python
+mujoco.mj_forward(m, d)  # computes d.qacc from applied forces
+applied = d.qfrc_applied + d.qfrc_actuator
+mujoco.mj_inverse(m, d)  # computes d.qfrc_inverse from d.qacc
+print(np.abs(d.qfrc_inverse - applied).max())       # reference: about 9e-16, no contact
+```
 
 Two uses. First, as a test of your controller: set d.qacc\[:\] =
 qacc_des, call mj_inverse, and d.qfrc_inverse is the exact torque for
@@ -546,10 +458,10 @@ by up to about 0.65 N·m** at moderate joint speeds. The Panda model has
 joint damping of 1 N·m·s/rad on every joint, which lives in
 qfrc_passive, not in qfrc_bias. The exact expression is:
 
-> tau = M @ qacc_des + d.qfrc_bias - d.qfrc_passive - d.qfrc_constraint
->
-> \# matches d.qfrc_inverse to about 4e-15 on the Panda (was 0.65
-> without the last two terms)
+```python
+tau = M @ qacc_des + d.qfrc_bias - d.qfrc_passive - d.qfrc_constraint
+# matches d.qfrc_inverse to about 4e-15 on the Panda (was 0.65 without the last two terms)
+```
 
 With the short formula the PD loop absorbs the error, which is why the
 arm still settles (to about 1e-4 rad within 2 s after a 0.2 rad
@@ -558,8 +470,10 @@ model's 0.1 kg·m² joint armature. Second use, as a permanent health
 check: enable mjENBL_FWDINV and MuJoCo reports the forward-inverse
 discrepancy in d.solver_fwdinv every step.
 
-> m.opt.enableflags \|= mujoco.mjtEnableBit.mjENBL_FWDINV
->
+```python
+m.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_FWDINV
+```
+
 > **Why this matters for you.** This is the claim of the ICRA 2014 paper
 > made concrete: because constraints are soft and the problem is convex,
 > inverse dynamics is well defined even with contact. You will use it in
@@ -656,29 +570,18 @@ tilted so that the plane acts as a ramp of angle θ. Write the XML
 yourself in models/ramp.xml; it is ten lines. Tilting gravity instead of
 the plane keeps the geometry trivial:
 
-> \<mujoco\>
->
-> \<option timestep="0.002" cone="pyramidal" impratio="1"
-> noslip_iterations="0"
->
-> gravity="3.355 0 -9.218"/\> \<!-- 9.81\*sin(20 deg), -9.81\*cos(20
-> deg) --\>
->
-> \<worldbody\>
->
-> \<geom name="floor" type="plane" size="2 2 .1" friction="0.5 0.005
-> 0.0001"/\>
->
-> \<body name="box" pos="0 0 0.05"\>\<freejoint/\>
->
-> \<geom name="box" type="box" size=".05 .05 .05" mass="0.5"
-> friction="0.5 0.005 0.0001"/\>
->
-> \</body\>
->
-> \</worldbody\>
->
-> \</mujoco\>
+```xml
+<mujoco>
+  <option timestep="0.002" cone="pyramidal" impratio="1" noslip_iterations="0"
+          gravity="3.355 0 -9.218"/>  <!-- 9.81*sin(20 deg), -9.81*cos(20 deg) -->
+  <worldbody>
+    <geom name="floor" type="plane" size="2 2 .1" friction="0.5 0.005 0.0001"/>
+    <body name="box" pos="0 0 0.05"><freejoint/>
+      <geom name="box" type="box" size=".05 .05 .05" mass="0.5" friction="0.5 0.005 0.0001"/>
+    </body>
+  </worldbody>
+</mujoco>
+```
 
 ### Experiment 1 — Coulomb slip angle
 
@@ -718,16 +621,13 @@ model.geom_solref\[:, 0\]. Measured penetration: 1.1e-6 m at 0.005,
 timeconst squared, as the reference-acceleration formula predicts
 (stiffness k is proportional to 1/timeconst²). Then check force balance:
 
-> f = np.zeros(6)
->
-> for i in range(d.ncon):
->
-> mujoco.mj_contactForce(m, d, i, f) \# f\[0\] is the normal force in
-> the contact frame
->
-> print(i, d.contact\[i\].dist, f\[0\])
->
-> \# reference: 4 contacts, 1.226 N each, sum = 4.905 N = m\*g
+```python
+f = np.zeros(6)
+for i in range(d.ncon):
+    mujoco.mj_contactForce(m, d, i, f)  # f[0] is the normal force in the contact frame
+    print(i, d.contact[i].dist, f[0])
+# reference: 4 contacts, 1.226 N each, sum = 4.905 N = m*g
+```
 
 ### Experiment 4 — solimp and the impedance curve
 
@@ -855,74 +755,40 @@ few steps, repeat. Write the cost and the sampling scheme yourself. The
 complete loop, verified to bring the hand within 8 mm of a target 0.29 m
 away in 4 s of simulated time:
 
-> import numpy as np, mujoco
->
-> from mujoco import rollout
->
-> m =
-> mujoco.MjModel.from_xml_path("mujoco_menagerie/franka_emika_panda/scene.xml")
->
-> d = mujoco.MjData(m); mujoco.mj_resetDataKeyframe(m, d, 0);
-> mujoco.mj_forward(m, d)
->
-> hand = m.body("hand").id
->
-> target = d.xpos\[hand\] + np.array(\[0.0, 0.25, -0.15\])
->
-> K, horizon, sigma = 64, 100, 0.1 \# samples, sim steps (0.2 s), noise
-> in rad
->
-> FULL = mujoco.mjtState.mjSTATE_FULLPHYSICS
->
-> rng = np.random.default_rng(0)
->
-> pool = \[mujoco.MjData(m) for \_ in range(8)\] \# one MjData per
-> thread; use your core count
->
-> scratch = mujoco.MjData(m)
->
-> lo, hi = m.actuator_ctrlrange.T
->
-> nominal = d.ctrl.copy()
->
-> s0 = np.zeros(mujoco.mj_stateSize(m, FULL))
->
-> def cost(final_states):
->
-> c = np.zeros(len(final_states))
->
-> for k, s in enumerate(final_states):
->
-> mujoco.mj_setState(m, scratch, s, FULL); mujoco.mj_kinematics(m,
-> scratch)
->
-> c\[k\] = np.linalg.norm(scratch.xpos\[hand\] - target) + 0.05 \*
-> np.linalg.norm(scratch.qvel)
->
-> return c
->
-> while d.time \< 4.0:
->
-> mujoco.mj_getState(m, d, s0, FULL)
->
-> cand = nominal + rng.normal(0, sigma, (K, m.nu)); cand\[0\] = nominal
-> \# keep the incumbent
->
-> cand = np.clip(cand, lo, hi)
->
-> ctrl = np.repeat(cand\[:, None, :\], horizon, axis=1) \# (K, horizon,
-> nu)
->
-> states, \_ = rollout.rollout(m, pool, np.tile(s0, (K, 1)), ctrl) \#
-> (K, horizon, nstate)
->
-> nominal = cand\[np.argmin(cost(states\[:, -1\]))\]
->
-> d.ctrl\[:\] = nominal
->
-> for \_ in range(5): mujoco.mj_step(m, d) \# replan at 100 Hz
->
-> print(np.linalg.norm(d.xpos\[hand\] - target))
+```python
+import numpy as np, mujoco
+from mujoco import rollout
+m = mujoco.MjModel.from_xml_path("mujoco_menagerie/franka_emika_panda/scene.xml")
+d = mujoco.MjData(m); mujoco.mj_resetDataKeyframe(m, d, 0); mujoco.mj_forward(m, d)
+hand = m.body("hand").id
+target = d.xpos[hand] + np.array([0.0, 0.25, -0.15])
+K, horizon, sigma = 64, 100, 0.1  # samples, sim steps (0.2 s), noise in rad
+FULL = mujoco.mjtState.mjSTATE_FULLPHYSICS
+rng = np.random.default_rng(0)
+pool = [mujoco.MjData(m) for _ in range(8)]  # one MjData per thread; use your core count
+scratch = mujoco.MjData(m)
+lo, hi = m.actuator_ctrlrange.T
+nominal = d.ctrl.copy()
+s0 = np.zeros(mujoco.mj_stateSize(m, FULL))
+ 
+def cost(final_states):
+    c = np.zeros(len(final_states))
+    for k, s in enumerate(final_states):
+        mujoco.mj_setState(m, scratch, s, FULL); mujoco.mj_kinematics(m, scratch)
+        c[k] = np.linalg.norm(scratch.xpos[hand] - target) + 0.05 * np.linalg.norm(scratch.qvel)
+    return c
+ 
+while d.time < 4.0:
+    mujoco.mj_getState(m, d, s0, FULL)
+    cand = nominal + rng.normal(0, sigma, (K, m.nu)); cand[0] = nominal  # keep the incumbent
+    cand = np.clip(cand, lo, hi)
+    ctrl = np.repeat(cand[:, None, :], horizon, axis=1)  # (K, horizon, nu)
+    states, _ = rollout.rollout(m, pool, np.tile(s0, (K, 1)), ctrl)  # (K, horizon, nstate)
+    nominal = cand[np.argmin(cost(states[:, -1]))]
+    d.ctrl[:] = nominal
+    for _ in range(5): mujoco.mj_step(m, d)  # replan at 100 Hz
+print(np.linalg.norm(d.xpos[hand] - target))
+```
 
 A lesson from getting this to work: sampling independent noise at every
 knot of a spline stalled 11 cm from the target, while sampling one held
@@ -933,12 +799,11 @@ the planner has to discover contact.
 
 ## Exercise 2 — linearize and check
 
-> A = np.zeros((2\*m.nv, 2\*m.nv)); B = np.zeros((2\*m.nv, m.nu))
->
-> mujoco.mjd_transitionFD(m, d, 1e-6, True, A, B, None, None) \# x_next
-> ~ A x + B u
->
-> print(np.abs(np.linalg.eigvals(A)).max())
+```python
+A = np.zeros((2*m.nv, 2*m.nv)); B = np.zeros((2*m.nv, m.nu))
+mujoco.mjd_transitionFD(m, d, 1e-6, True, A, B, None, None)   # x_next ~ A x + B u
+print(np.abs(np.linalg.eigvals(A)).max())
+```
 
 Compute A and B at the home pose, then (a) verify them by perturbing the
 state and comparing one mj_step against the linear prediction, (b)
@@ -1023,78 +888,46 @@ polish it. **Mode: Delegate.**
     Menagerie scene; your env adds the box, the goal and your reward
     from rewards/push.py.
 
-> class PandaReachEnv(gym.Env):
->
-> def \_\_init\_\_(self, xml, frame_skip=10, max_steps=200):
->
-> self.model = mujoco.MjModel.from_xml_path(xml); self.data =
-> mujoco.MjData(self.model)
->
-> self.frame_skip, self.max_steps = frame_skip, max_steps \# 10 x 0.002
-> s = 50 Hz control
->
-> self.hand = self.model.body("hand").id
->
-> self.lo, self.hi = self.model.actuator_ctrlrange\[:7\].T
->
-> self.action_space = spaces.Box(-1.0, 1.0, (7,), np.float32)
->
-> self.observation_space = spaces.Box(-np.inf, np.inf, (20,),
-> np.float64)
->
-> def \_obs(self):
->
-> return np.concatenate(\[self.data.qpos\[:7\], self.data.qvel\[:7\],
->
-> self.data.xpos\[self.hand\], self.target\])
->
-> def reset(self, \*, seed=None, options=None):
->
-> super().reset(seed=seed)
->
-> mujoco.mj_resetDataKeyframe(self.model, self.data, 0)
->
-> self.target = np.array(\[0.55, 0.0, 0.45\]) +
-> self.np_random.uniform(-0.15, 0.15, 3)
->
-> mujoco.mj_forward(self.model, self.data); self.t = 0
->
-> return self.\_obs(), {}
->
-> def step(self, action):
->
-> a = np.clip(action, -1, 1)
->
-> self.data.ctrl\[:7\] = self.lo + (a + 1) \* 0.5 \* (self.hi - self.lo)
->
-> mujoco.mj_step(self.model, self.data, self.frame_skip)
->
-> self.t += 1
->
-> dist = np.linalg.norm(self.data.xpos\[self.hand\] - self.target)
->
-> return self.\_obs(), -dist, bool(dist \< 0.02), self.t \>=
-> self.max_steps, {"dist": dist}
+```python
+class PandaReachEnv(gym.Env):
+    def __init__(self, xml, frame_skip=10, max_steps=200):
+        self.model = mujoco.MjModel.from_xml_path(xml); self.data = mujoco.MjData(self.model)
+        self.frame_skip, self.max_steps = frame_skip, max_steps  # 10 x 0.002 s = 50 Hz control
+        self.hand = self.model.body("hand").id
+        self.lo, self.hi = self.model.actuator_ctrlrange[:7].T
+        self.action_space = spaces.Box(-1.0, 1.0, (7,), np.float32)
+        self.observation_space = spaces.Box(-np.inf, np.inf, (20,), np.float64)
+    def _obs(self):
+        return np.concatenate([self.data.qpos[:7], self.data.qvel[:7],
+                               self.data.xpos[self.hand], self.target])
+    def reset(self, *, seed=None, options=None):
+        super().reset(seed=seed)
+        mujoco.mj_resetDataKeyframe(self.model, self.data, 0)
+        self.target = np.array([0.55, 0.0, 0.45]) + self.np_random.uniform(-0.15, 0.15, 3)
+        mujoco.mj_forward(self.model, self.data); self.t = 0
+        return self._obs(), {}
+    def step(self, action):
+        a = np.clip(action, -1, 1)
+        self.data.ctrl[:7] = self.lo + (a + 1) * 0.5 * (self.hi - self.lo)
+        mujoco.mj_step(self.model, self.data, self.frame_skip)
+        self.t += 1
+        dist = np.linalg.norm(self.data.xpos[self.hand] - self.target)
+        return self._obs(), -dist, bool(dist < 0.02), self.t >= self.max_steps, {"dist": dist}
+```
 
 4.  Train. This block is standard SB3 usage but was **not run here**;
     have the agent verify it and write train.py / eval.py with YAML
     configs:
 
-> from stable_baselines3 import PPO
->
-> from stable_baselines3.common.env_util import make_vec_env
->
-> from stable_baselines3.common.vec_env import SubprocVecEnv
->
-> make = lambda: PandaPushEnv("models/panda_push.xml")
->
-> venv = make_vec_env(make, n_envs=12, vec_env_cls=SubprocVecEnv)
->
-> model = PPO("MlpPolicy", venv, verbose=1, tensorboard_log="runs/",
-> seed=0)
->
-> model.learn(total_timesteps=2_000_000);
-> model.save("checkpoints/ppo_push")
+```python
+from stable_baselines3 import PPO
+from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.vec_env import SubprocVecEnv
+make = lambda: PandaPushEnv("models/panda_push.xml")
+venv = make_vec_env(make, n_envs=12, vec_env_cls=SubprocVecEnv)
+model = PPO("MlpPolicy", venv, verbose=1, tensorboard_log="runs/", seed=0)
+model.learn(total_timesteps=2_000_000); model.save("checkpoints/ppo_push")
+```
 
 5.  Reward engineering is where your hours go. Start
     sparse-plus-distance, watch rollouts early, and add terms only in
@@ -1210,95 +1043,52 @@ engine.
     0.86 ± 0.26) and finger gain (ST 0.60 ± 0.27) far above friction and
     arm damping (ST 0.04 each) over these deliberately wide ranges.
 
-> import copy, numpy as np, mujoco
->
-> from mujoco import rollout
->
-> from SALib.sample import sobol as sobol_sample
->
-> from SALib.analyze import sobol
->
-> m0 =
-> mujoco.MjModel.from_xml_path("mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml")
->
-> d0 = mujoco.MjData(m0); FULL = mujoco.mjtState.mjSTATE_FULLPHYSICS
->
-> grip, home = m0.key("pickup").id, m0.key("home").id
->
-> mujoco.mj_resetDataKeyframe(m0, d0, grip); mujoco.mj_forward(m0, d0)
->
-> s0 = np.zeros(mujoco.mj_stateSize(m0, FULL)); mujoco.mj_getState(m0,
-> d0, s0, FULL)
->
-> dt = m0.opt.timestep; n_close, n_lift, n_hold = int(.5/dt),
-> int(1.5/dt), int(.5/dt)
->
-> c_grip, c_home = m0.key_ctrl\[grip\].copy(),
-> m0.key_ctrl\[home\].copy()
->
-> ctrl = np.tile(c_grip, (n_close + n_lift + n_hold, 1)); ctrl\[:, 7\] =
-> 0.0 \# close gripper
->
-> a = np.linspace(0, 1, n_lift)\[:, None\]
->
-> ctrl\[n_close:n_close+n_lift, :7\] = (1 - a) \* c_grip\[:7\] + a \*
-> c_home\[:7\] \# lift
->
-> ctrl\[n_close+n_lift:, :7\] = c_home\[:7\]
->
-> box_g, box_b = m0.geom("box").id, m0.body("box").id
->
-> qz = m0.jnt_qposadr\[m0.body_jntadr\[box_b\]\] + 2 \# box z in qpos
->
-> problem = {"num_vars": 4,
->
-> "names": \["box_friction", "box_mass_scale", "finger_kp_scale",
-> "arm_damping_scale"\],
->
-> "bounds": \[\[0.2, 1.5\], \[0.5, 8.0\], \[0.3, 1.5\], \[0.5, 2.0\]\]}
-> \# yours to justify
->
-> def make(x): \# one perturbed model per sample
->
-> m = copy.copy(m0)
->
-> m.geom_friction\[box_g, 0\] = x\[0\]
->
-> m.body_mass\[box_b\] \*= x\[1\]; m.body_inertia\[box_b\] \*= x\[1\]
->
-> m.actuator_gainprm\[7, 0\] \*= x\[2\]; m.actuator_biasprm\[7, 1:3\]
-> \*= x\[2\]
->
-> m.dof_damping\[:7\] \*= x\[3\]
->
-> return m
->
-> X = sobol_sample.sample(problem, 1024, calc_second_order=False) \#
-> N\*(D+2) rows
->
-> pool = \[mujoco.MjData(m0) for \_ in range(16)\] \# threads
->
-> Y = np.zeros(len(X)); CH = 16 \# chunk size
->
-> for i in range(0, len(X), CH):
->
-> models = \[make(x) for x in X\[i:i+CH\]\]
->
-> n = len(models)
->
-> states, \_ = rollout.rollout(models, pool, np.tile(s0, (n, 1)),
-> np.tile(ctrl, (n, 1, 1)))
->
-> Y\[i:i+CH\] = states\[:, -1, 1 + qz\] \# state = \[t, qpos, qvel\]
->
-> S = sobol.analyze(problem, Y, calc_second_order=False,
-> num_resamples=1000)
->
-> for name, s1, st, ci in zip(problem\["names"\], S\["S1"\], S\["ST"\],
-> S\["ST_conf"\]):
->
-> print(f"{name:20s} S1 {s1:5.2f} ST {st:5.2f} +/- {ci:.2f}")
->
+```python
+import copy, numpy as np, mujoco
+from mujoco import rollout
+from SALib.sample import sobol as sobol_sample
+from SALib.analyze import sobol
+ 
+m0 = mujoco.MjModel.from_xml_path("mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml")
+d0 = mujoco.MjData(m0); FULL = mujoco.mjtState.mjSTATE_FULLPHYSICS
+grip, home = m0.key("pickup").id, m0.key("home").id
+mujoco.mj_resetDataKeyframe(m0, d0, grip); mujoco.mj_forward(m0, d0)
+s0 = np.zeros(mujoco.mj_stateSize(m0, FULL)); mujoco.mj_getState(m0, d0, s0, FULL)
+ 
+dt = m0.opt.timestep; n_close, n_lift, n_hold = int(.5/dt), int(1.5/dt), int(.5/dt)
+c_grip, c_home = m0.key_ctrl[grip].copy(), m0.key_ctrl[home].copy()
+ctrl = np.tile(c_grip, (n_close + n_lift + n_hold, 1)); ctrl[:, 7] = 0.0  # close gripper
+a = np.linspace(0, 1, n_lift)[:, None]
+ctrl[n_close:n_close+n_lift, :7] = (1 - a) * c_grip[:7] + a * c_home[:7]       # lift
+ctrl[n_close+n_lift:, :7] = c_home[:7]
+ 
+box_g, box_b = m0.geom("box").id, m0.body("box").id
+qz = m0.jnt_qposadr[m0.body_jntadr[box_b]] + 2  # box z in qpos
+problem = {"num_vars": 4,
+           "names": ["box_friction", "box_mass_scale", "finger_kp_scale", "arm_damping_scale"],
+           "bounds": [[0.2, 1.5], [0.5, 8.0], [0.3, 1.5], [0.5, 2.0]]}  # yours to justify
+ 
+def make(x):                                   # one perturbed model per sample
+    m = copy.copy(m0)
+    m.geom_friction[box_g, 0] = x[0]
+    m.body_mass[box_b] *= x[1]; m.body_inertia[box_b] *= x[1]
+    m.actuator_gainprm[7, 0] *= x[2]; m.actuator_biasprm[7, 1:3] *= x[2]
+    m.dof_damping[:7] *= x[3]
+    return m
+ 
+X = sobol_sample.sample(problem, 1024, calc_second_order=False)  # N*(D+2) rows
+pool = [mujoco.MjData(m0) for _ in range(16)]                                  # threads
+Y = np.zeros(len(X)); CH = 16  # chunk size
+for i in range(0, len(X), CH):
+    models = [make(x) for x in X[i:i+CH]]
+    n = len(models)
+    states, _ = rollout.rollout(models, pool, np.tile(s0, (n, 1)), np.tile(ctrl, (n, 1, 1)))
+    Y[i:i+CH] = states[:, -1, 1 + qz]                     # state = [t, qpos, qvel]
+S = sobol.analyze(problem, Y, calc_second_order=False, num_resamples=1000)
+for name, s1, st, ci in zip(problem["names"], S["S1"], S["ST"], S["ST_conf"]):
+    print(f"{name:20s} S1 {s1:5.2f}   ST {st:5.2f} +/- {ci:.2f}")
+```
+
 > **Memory trap.** Each copy of this model is about 40 MB because of the
 > meshes. Building 128 copies at once exhausted 8 GB in my run. Keep the
 > chunk small (16 copies is about 640 MB) as shown.
@@ -1324,33 +1114,27 @@ engine.
 1.  Install the JAX line of Playground with a pin, then confirm the
     engine did not move:
 
-> pip install "playground==0.2.0" "mujoco==3.9.0" "mujoco-mjx==3.9.0"
->
-> python -c "import mujoco, jax; print(mujoco.\_\_version\_\_,
-> jax.devices())" \# 3.9.0, CudaDevice
+```bash
+pip install "playground==0.2.0" "mujoco==3.9.0" "mujoco-mjx==3.9.0"
+python -c "import mujoco, jax; print(mujoco.__version__, jax.devices())"  # 3.9.0, CudaDevice
+```
 
 2.  Learn the functional style on the raw API before using any
     framework. Verified on CPU JAX:
 
-> import jax, mujoco
->
-> from mujoco import mjx
->
-> mx = mjx.put_model(m0); dx = mjx.put_data(m0, d0)
->
-> step = jax.jit(mjx.step)
->
-> dx1 = step(mx, dx) \# first call compiles (tens of seconds)
->
-> mus = jax.numpy.linspace(0.3, 1.2, 8) \# batch over a model field
->
-> def one(mu):
->
-> mm = mx.replace(geom_friction=mx.geom_friction.at\[:, 0\].set(mu))
->
-> return mjx.step(mm, dx).qpos
->
-> out = jax.jit(jax.vmap(one))(mus) \# shape (8, 16)
+```python
+import jax, mujoco
+from mujoco import mjx
+mx = mjx.put_model(m0); dx = mjx.put_data(m0, d0)
+step = jax.jit(mjx.step)
+dx1 = step(mx, dx)  # first call compiles (tens of seconds)
+ 
+mus = jax.numpy.linspace(0.3, 1.2, 8)                        # batch over a model field
+def one(mu):
+    mm = mx.replace(geom_friction=mx.geom_friction.at[:, 0].set(mu))
+    return mjx.step(mm, dx).qpos
+out = jax.jit(jax.vmap(one))(mus)                            # shape (8, 16)
+```
 
 3.  Equivalence tests, written by the agent before anything else.
     Measured differences between MJX (float32) and CPU MuJoCo on this
@@ -1367,17 +1151,13 @@ engine.
     actions, control dt 0.02 and sim dt 0.005, and its PPO config asks
     for 2,048 environments and 20 million steps.
 
-> from mujoco_playground import registry
->
-> from mujoco_playground.config import manipulation_params
->
-> env = registry.load("PandaPickCube", config_overrides={"impl": "jax"})
-> \# default impl is "warp"
->
-> cfg = manipulation_params.brax_ppo_config("PandaPickCube")
->
-> print(env.observation_size, env.action_size, env.dt, env.sim_dt,
-> cfg.num_envs, cfg.num_timesteps)
+```python
+from mujoco_playground import registry
+from mujoco_playground.config import manipulation_params
+env = registry.load("PandaPickCube", config_overrides={"impl": "jax"})  # default impl is "warp"
+cfg = manipulation_params.brax_ppo_config("PandaPickCube")
+print(env.observation_size, env.action_size, env.dt, env.sim_dt, cfg.num_envs, cfg.num_timesteps)
+```
 
 5.  Train the unrandomized baseline with Brax PPO. Have the agent start
     from the official training script in the repository's rss2025 tree
@@ -1398,43 +1178,24 @@ randomization function is your contribution. Brax's ppo.train accepts a
 randomization_fn (confirmed in the installed version). The pattern,
 taken from the package's own LEAP-hand task:
 
-> def domain_randomize(model: mjx.Model, rng: jax.Array): \# rng has
-> shape (num_envs, 2)
->
-> @jax.vmap
->
-> def rand(key):
->
-> k1, k2 = jax.random.split(key)
->
-> mu = jax.random.uniform(k1, minval=LO, maxval=HI)
->
-> friction = model.geom_friction.at\[BOX_GEOM, 0\].set(mu)
->
-> scale = jax.random.uniform(k2, minval=0.5, maxval=2.0)
->
-> mass = model.body_mass.at\[BOX_BODY\].set(model.body_mass\[BOX_BODY\]
-> \* scale)
->
-> inertia =
-> model.body_inertia.at\[BOX_BODY\].set(model.body_inertia\[BOX_BODY\]
-> \* scale)
->
-> return friction, mass, inertia
->
-> friction, mass, inertia = rand(rng)
->
-> in_axes = jax.tree_util.tree_map(lambda x: None, model)
->
-> in_axes = in_axes.tree_replace({"geom_friction": 0, "body_mass": 0,
-> "body_inertia": 0})
->
-> model = model.tree_replace(
->
-> {"geom_friction": friction, "body_mass": mass, "body_inertia":
-> inertia})
->
-> return model, in_axes
+```python
+def domain_randomize(model: mjx.Model, rng: jax.Array):  # rng has shape (num_envs, 2)
+    @jax.vmap
+    def rand(key):
+        k1, k2 = jax.random.split(key)
+        mu = jax.random.uniform(k1, minval=LO, maxval=HI)
+        friction = model.geom_friction.at[BOX_GEOM, 0].set(mu)
+        scale = jax.random.uniform(k2, minval=0.5, maxval=2.0)
+        mass = model.body_mass.at[BOX_BODY].set(model.body_mass[BOX_BODY] * scale)
+        inertia = model.body_inertia.at[BOX_BODY].set(model.body_inertia[BOX_BODY] * scale)
+        return friction, mass, inertia
+    friction, mass, inertia = rand(rng)
+    in_axes = jax.tree_util.tree_map(lambda x: None, model)
+    in_axes = in_axes.tree_replace({"geom_friction": 0, "body_mass": 0, "body_inertia": 0})
+    model = model.tree_replace(
+        {"geom_friction": friction, "body_mass": mass, "body_inertia": inertia})
+    return model, in_axes
+```
 
 The experiment, which you specify in DR_PROTOCOL.md before any run:
 
