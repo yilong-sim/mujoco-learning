@@ -19,10 +19,12 @@ Update at the end of every session: done / next / open questions.
   "home" keyframe headless with EGL to `results/setup/home.png`. The rendered
   pose matches the keyframe qpos: elbow −π/2, wrist +π/2, joint 7 −π/4,
   gripper open at 0.04 m per finger.
+- Setup step 4: permissions in `.claude/settings.local.json` (git-ignored).
+  Allow: pytest, python, git add, git commit. Ask: pip, mamba, rm, git push.
+  Rules match the command prefix, so `conda run -n robo python ...` still
+  prompts. Launch Claude Code from inside the activated `robo` env.
 
 ### Next
-- Setup step 4: set `/permissions` (allow pytest, python, git add/commit
-  without prompts; keep prompts for pip, mamba, rm, git push).
 - Phase 1 close-out (PLAN.md "Phase 1 — close-out"):
   - `tests/test_phase1.py` from your assertion list: both models load,
     Panda nq/nv/nu = 9/9/8, 1,000 steps without NaN, sensors nonzero after
