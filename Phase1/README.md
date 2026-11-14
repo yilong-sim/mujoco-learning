@@ -20,7 +20,7 @@ yet. That sag is the Phase 2 problem. Close the viewer window to stop.
 
 ### Files
 
-- `arm.xml` — the model. Two bodies, two hinge joints, capsule geoms, plus
+- `../models/arm.xml` — the model. Two bodies, two hinge joints, capsule geoms, plus
   actuators and sensors you'll use in Week 2. Read it top to bottom.
 - `run.py` — the canonical loop: load model → make data → (sense → control →
   step → render) every timestep.
@@ -28,7 +28,7 @@ yet. That sag is the Phase 2 problem. Close the viewer window to stop.
 ### Week 1 milestone — break it and know why
 
 The skill isn't building the arm; it's diagnosing it when it breaks. Make each
-change in `arm.xml`, run, read the error, then revert:
+change in `models/arm.xml`, run, read the error, then revert:
 
 1. **Delete `link1_geom`.** → "mass and inertia must be positive." A moving
    body needs mass, and MuJoCo was inferring it from that geom.

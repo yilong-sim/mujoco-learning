@@ -14,3 +14,6 @@ MuJoCo_Study_Plan_v4.docx
 
 # personal Claude Code settings (permissions)
 .claude/settings.local.json
+
+# MuJoCo auto-written warning log (e.g. NaN/instability)
+MUJOCO_LOG.TXT

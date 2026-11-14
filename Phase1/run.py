@@ -16,12 +16,16 @@ Mental map (same shape as your MD loop):
 """
 
 import time
+from pathlib import Path
 import mujoco
 import mujoco.viewer
 
+# The model lives in <repo>/models/; resolve it from this file so it runs from any cwd.
+MODEL_XML = Path(__file__).resolve().parents[1] / "models" / "arm.xml"
+
 # ===== SETUP (runs once) ====================================================
 # Load the static model description from your hand-written MJCF.
-model = mujoco.MjModel.from_xml_path("arm.xml")
+model = mujoco.MjModel.from_xml_path(str(MODEL_XML))
 # Allocate the dynamic state that mj_step will advance.
 data = mujoco.MjData(model)
 

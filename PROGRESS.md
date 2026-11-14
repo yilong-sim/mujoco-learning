@@ -23,6 +23,9 @@ Update at the end of every session: done / next / open questions.
   Allow: pytest, python, git add, git commit. Ask: pip, mamba, rm, git push.
   Rules match the command prefix, so `conda run -n robo python ...` still
   prompts. Launch Claude Code from inside the activated `robo` env.
+- Repo layout: `Phase1/arm.xml` moved to `models/arm.xml` (PLAN.md layout).
+  `Phase1/run.py` now loads it via a path relative to the script, so it works
+  from any cwd. `MUJOCO_LOG.TXT` deleted and git-ignored.
 
 ### Next
 - Phase 1 close-out (PLAN.md "Phase 1 — close-out"):
@@ -37,11 +40,8 @@ Update at the end of every session: done / next / open questions.
 - `~/.bashrc:147` exports `MUJOCO_GL=glfw`. Any headless script that only
   defaults to EGL will use glfw. `check_env.py` forces EGL. Keep glfw as the
   shell default (for the viewer), or switch to egl and set glfw per viewer run?
-- Repo layout: work so far is in `Phase1/` and `Fallingbody/`, but CLAUDE.md
-  and PLAN.md assume `models/`, `controllers/`, `rewards/`, `tests/`,
-  `sweeps/`, `envs/`, `results/`. Move `Phase1/arm.xml` to `models/`?
-  (Your call. models/ is your folder.)
-- `Phase1/MUJOCO_LOG.TXT` is committed. Keep it, or add it to .gitignore?
+- `Fallingbody/` (model + script) is still outside the PLAN.md layout. Move
+  `fallingbody.mjcf.xml` to `models/` too, or leave it as a one-off?
 - PLAN.md says repo `~/mujoco-study`; the actual repo is
   `~/projects/mujoco-learning`. Harmless, but the paths in PLAN.md won't
   match.
